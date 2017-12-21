@@ -3,7 +3,7 @@
 <head>
 
     <meta charset="utf-8">
-    <title>登陆成功 正在跳转</title>
+    <title>智能狗窝</title>
     <style >
         body {background-color:#daf1fd;
         }
@@ -29,7 +29,50 @@
 
     <script type="text/javascript">
 
-      var api = new OneNetApi('MZznfnbVssdX8olnB4q1yM=d6jo=');
+$(document).ready(function(){
+d=new Date();
+var a=d.getHours() ;
+var b=d.getMinutes();
+var c=d.getSeconds();
+
+
+
+ if(a>=7&&a<12){
+     alert("狗狗的早饭已经投出，下一次投食时间是中午十二点")
+}
+else if(a>=12&&a<19){
+     alert("晚上七点狗狗开饭，上一次投食时间是中午十二点")
+}
+else if(a>=19||a<7){
+    alert("今天三餐都已投食完毕，等明早七点狗狗才能吃早饭")
+}
+function current(){ 
+    d=new Date();
+str=''; 
+str +=d.getFullYear()+'年'; //获取当前年份 
+str +=d.getMonth()+1+'月'; //获取当前月份（0——11） 
+str +=d.getDate()+'日'; 
+str +=d.getHours()+'时'; 
+str +=d.getMinutes()+'分'; 
+str +=d.getSeconds()+'秒'; 
+return str; 
+//if(d.getHours()==20||d.getMinutes()==59||d.getSeconds()==20)
+
+} 
+setInterval(function(){$("#nowtime").html(current);
+    var d=new Date();
+var a=d.getHours() ;
+var b=d.getMinutes();
+var c=d.getSeconds();if((a==12&&b==0&&c==0)||(a==7&&b==0&&c==0)||(a==19&&b==0&&c==0)){ alert("狗狗的吃饭时间到了，已自动投食")}},1000); 
+
+
+
+})
+
+
+
+
+      var api = new OneNetApi('5E7HgZdulMrWbTmXUlhkN9kfXFk=');
 
 
 
@@ -39,7 +82,7 @@
      * api.getDataPoints(设备id, 参数)
      * 参数为一个json对象，可以设置各个读取参数，参数列表参考http://open.iot.10086.cn/apidoc/datapoint/view.html
      * */
-    api.getDataPoints(20464942).done(function(data){
+    api.getDataPoints(20400096).done(function(data){
         console.log('单个数据点api调用完成，服务器返回data为：', data);
         console.log(JSON.stringify(data))
        var a=data.data.datastreams[0].datapoints[0].value;
@@ -48,11 +91,14 @@
                 var len=data.data.count;
                 console.log ("数据种类："+len);
                                 str+="<tr><td>"+"数据类型"+"</td><td>"+"上传时间"+"</td><td>"+"数据值"+"</td></tr>"
-                for(var i=0;i<len;i++)
-                {
-                    str+="<tr><td>"+data.data.datastreams[i].id+"</td><td>"+data.data.datastreams[i].datapoints[0].at+"</td><td>"+data.data.datastreams[i].datapoints[0].value+"</td></tr>";
+               
+                    str+="<tr><td>"+data.data.datastreams[0].id+"</td><td>"+data.data.datastreams[0].datapoints[0].at+"</td><td>"+data.data.datastreams[0].datapoints[0].value+"</td></tr>";
+                    str+="<tr><td>"+data.data.datastreams[2].id+"</td><td>"+data.data.datastreams[2].datapoints[0].at+"</td><td>"+data.data.datastreams[2].datapoints[0].value+"</td></tr>";
+                    str+="<tr><td>"+data.data.datastreams[3].id+"</td><td>"+data.data.datastreams[3].datapoints[0].at+"</td><td>"+data.data.datastreams[3].datapoints[0].value+"</td></tr>";
 
-                }
+
+
+                
                 str+="</table>";
                 $("#feedbackTable").html(str);
 
@@ -71,7 +117,7 @@
      * 发送命令
      * api.sendCommand(设备id, 命令内容) 命令内容参考http://open.iot.10086.cn/apidoc/cmd/create.html
      * */
-    api.sendCommand(20464942, '100').done(function(data){
+    api.sendCommand(20400096, '100').done(function(data){
         console.log('发送命令api调用完成，服务器返回data为：', data);
     });
 
@@ -97,13 +143,28 @@
         console.log("end")
     }
 })*/
+    function load(){
+            var username=sessionStorage.key(sessionStorage.length);
+            if(sessionStorage.length==0) {
+                alert("请先登录");
+                window.location.href = 'http://indianmifan.gitee.io/';
+            }
+            else {
+               var ming = document.getElementById("dengluming");
+               ming.innerHTML=sessionStorage.getItem("username");
+            }
+ function clear() {
+            window.location.href='https://indianmifan.github.io/SmartKennel/';
+
+        }
     </script>
     </head>
     <body>
     <div>
-        <p>登陆成功 </p>
+        <p>智能狗窝观测站 </p>
 
         <div id="dengluming" style="text-align:center;">
+          <div id="nowtime"></div>
 <div id="feedbackTable"></div>
     <div id="warnn"></div>
         <div id="list" style="text-align:center;"></div>
