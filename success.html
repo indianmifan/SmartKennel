@@ -1,0 +1,113 @@
+<!doctype html>
+<html>
+<head>
+
+    <meta charset="utf-8">
+    <title>登陆成功 正在跳转</title>
+    <style >
+        body {background-color:#daf1fd;
+        }
+        div{font-size: 50px;
+
+            color: #0f88eb;
+            /*position:absolute;
+
+             top:40%;
+
+               left:50%;
+
+             -webkit-transform:translate(-50%,-50%);
+
+              -moz-transform:？(-50%,-50%);
+
+              transform:？(-50%,-50%); */
+        }
+    </style>
+
+    <script src="jquery-3.2.1.js"></script>
+     <script src="onenentsdk.js"></script>
+
+    <script type="text/javascript">
+
+      var api = new OneNetApi('MZznfnbVssdX8olnB4q1yM=d6jo=');
+
+
+
+
+    /**
+     * 获取数据点
+     * api.getDataPoints(设备id, 参数)
+     * 参数为一个json对象，可以设置各个读取参数，参数列表参考http://open.iot.10086.cn/apidoc/datapoint/view.html
+     * */
+    api.getDataPoints(20464942).done(function(data){
+        console.log('单个数据点api调用完成，服务器返回data为：', data);
+        console.log(JSON.stringify(data))
+       var a=data.data.datastreams[0].datapoints[0].value;
+       console.log(a)
+          var str="<table border='1'>";
+                var len=data.data.count;
+                console.log ("数据种类："+len);
+                                str+="<tr><td>"+"数据类型"+"</td><td>"+"上传时间"+"</td><td>"+"数据值"+"</td></tr>"
+                for(var i=0;i<len;i++)
+                {
+                    str+="<tr><td>"+data.data.datastreams[i].id+"</td><td>"+data.data.datastreams[i].datapoints[0].at+"</td><td>"+data.data.datastreams[i].datapoints[0].value+"</td></tr>";
+
+                }
+                str+="</table>";
+                $("#feedbackTable").html(str);
+
+
+                        var warn="足够"
+                if(data.data.datastreams[1].datapoints[0].value>=100)
+                    { warn="不够";alert(warn);
+                      
+            }
+              var string="<br><br><br><table border='5'>"+"<tr><td>狗粮余量</td><td>"+warn+"</td></tr></table>";
+                         $("#warnn").html(string);
+    });
+
+
+    /**
+     * 发送命令
+     * api.sendCommand(设备id, 命令内容) 命令内容参考http://open.iot.10086.cn/apidoc/cmd/create.html
+     * */
+    api.sendCommand(20464942, '100').done(function(data){
+        console.log('发送命令api调用完成，服务器返回data为：', data);
+    });
+
+  /*  $.ajax({
+        type:'GET',
+              url: 'https://api.heclouds.com/devices/20400096/datastreams?datastream_ids=Light,Temperature,&limit=25',
+     header: {
+        //'content-type':"application/json",
+        '       ':"ETMLVxn1RSkqPlgM80rctZiG=OY=",
+    
+      },
+       jsonp: 'callback',
+       dataType:'JSONP',
+      success: function () {
+        console.log(date)      //打印返回的数据
+      },
+
+      fail: function (res) {
+        console.log("fail!!!")
+      },
+
+      complete: function (res) {
+        console.log("end")
+    }
+})*/
+    </script>
+    </head>
+    <body>
+    <div>
+        <p>登陆成功 </p>
+
+        <div id="dengluming" style="text-align:center;">
+<div id="feedbackTable"></div>
+    <div id="warnn"></div>
+        <div id="list" style="text-align:center;"></div>
+      
+</div>
+</body>
+</html>
